@@ -1,0 +1,5 @@
+[user]
+	name = Hugo Nijdam
+	email = hnijdam@gmail.com
+[init]
+	defaultBranch = main
