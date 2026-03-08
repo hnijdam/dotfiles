@@ -1,0 +1,48 @@
+# Enable zsh completion
+autoload -Uz compinit
+compinit
+
+# Make Home/End, Delete work
+bindkey "\e[1~" beginning-of-line   # Home
+bindkey "\e[4~" end-of-line         # End
+bindkey "\e[3~" delete-char         # DEL
+bindkey "\e[5~" beginning-of-history # Page Up
+bindkey "\e[6~" end-of-history      # Page Down
+
+# -------------------------------
+# Completion system
+# -------------------------------
+fpath=(~/.zsh/plugins/zsh-completions/src $fpath)
+autoload -Uz compinit
+compinit -C
+
+# -------------------------------
+# Colors
+# -------------------------------
+autoload -U colors && colors
+
+# -------------------------------
+# History
+# -------------------------------
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
+setopt APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+
+# -------------------------------
+# Plugins
+# -------------------------------
+source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+
+
+# ~/.zshrc
+
+eval "$(starship init zsh)"
+
+# Created by `pipx` on 2026-03-04 19:11:11
+export PATH="$PATH:/home/hnijdam/.local/bin"
