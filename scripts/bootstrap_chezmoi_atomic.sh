@@ -20,28 +20,28 @@ if command -v rpm-ostree >/dev/null; then
     toolbox create dev || true
 
     # --- 4️⃣ Install development tools in container ---
-    echo "📦 Installing development tools inside dev container..."
-    toolbox run --container dev dnf group install -y "Development Tools"
-    toolbox run --container dev dnf install -y \
-        python3 \
-        python3-pip \
-        nodejs \
-        npm \
-        gcc \
-        gcc-c++ \
-        make \
-        cmake \
-        gdb \
-        clang \
-        clang-tools-extra \
-        cppcheck \
-        clang-format \
-        clang-tidy \
-        gyp \
-        gyp-next \
-        git \
-        curl \
-        wget
+echo "📦 Installing development tools inside dev container..."
+toolbox run --container dev --as-root dnf group install -y "Development Tools"
+toolbox run --container dev --as-root dnf install -y \
+    python3 \
+    python3-pip \
+    nodejs \
+    npm \
+    gcc \
+    gcc-c++ \
+    make \
+    cmake \
+    gdb \
+    clang \
+    clang-tools-extra \
+    cppcheck \
+    clang-format \
+    clang-tidy \
+    gyp \
+    gyp-next \
+    git \
+    curl \
+    wget
 
     echo "✅ Development container ready. Enter it with: toolbox enter dev"
 
