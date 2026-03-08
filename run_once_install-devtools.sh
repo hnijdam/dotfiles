@@ -4,11 +4,13 @@ set -e
 if command -v rpm-ostree >/dev/null; then
     echo "Atomic Fedora detected"
 
+    # Container bestaat al, dus niet opnieuw maken
     toolbox create dev || true
 
-    toolbox run --container dev sudo dnf groupinstall -y "Development Tools"
+    # Gebruik DNF5 syntax: 'group install', NIET 'groupinstall'
+    toolbox run --container dev dnf group install -y "Development Tools"
 
-    toolbox run --container dev sudo dnf install -y \
+    toolbox run --container dev dnf install -y \
         python3 \
         python3-pip \
         nodejs \
@@ -18,12 +20,6 @@ if command -v rpm-ostree >/dev/null; then
         make \
         cmake \
         gdb \
-        valgrind \
-        strace \
-        ltrace \
-        perf \
-        gprof \
-        lldb \
         clang \
         clang-tools-extra \
         cppcheck \
@@ -35,8 +31,7 @@ if command -v rpm-ostree >/dev/null; then
 else
     echo "Classic Fedora detected"
 
-    sudo dnf groupinstall -y "Development Tools"
-
+    sudo dnf group install -y "Development Tools"
     sudo dnf install -y \
         python3 \
         python3-pip \
@@ -47,17 +42,6 @@ else
         make \
         cmake \
         gdb \
-        valgrind \
-        strace \
-        ltrace \
-        perf \
-        gprof \
-        lldb \
         clang \
-        clang-tools-extra \
-        cppcheck \
-        clang-format \
-        clang-tidy \
-        gyp \
-        gyp-next
+        clang-tools-extra
 fi
