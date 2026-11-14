@@ -1,32 +1,59 @@
 add_newline = true
 
-[character]
-success_symbol = "[➜](bold green)"
-error_symbol = "[➜](bold red)"
+format = """
+[╭─](bold blue)$directory$git_branch$git_status$python$nodejs$rust
+[╰─](bold blue)$character"""
+
+right_format = """$cmd_duration$status"""
 
 [directory]
 style = "bold cyan"
 truncation_length = 3
+truncate_to_repo = true
+read_only = " 🔒"
 
 [git_branch]
-symbol = "🌱 "
+format = " [ $branch]($style)"
 style = "bold purple"
 
 [git_status]
-style = "red"
-
-[nodejs]
-symbol = "⬢ "
-style = "bold green"
+format = " [$all_status$ahead_behind]($style)"
+style = "bold yellow"
+conflicted = "󰞇 "
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇕ "
+untracked = "?${count} "
+modified = "!${count} "
+staged = "+${count} "
+renamed = "»${count} "
+deleted = "✘${count} "
 
 [python]
-symbol = "🐍 "
-style = "bold yellow"
+format = ' [🐍 $version(\($virtualenv\))]($style)'
+style = "yellow"
+symbol = ""
+[nodejs]
+format = " [ $version]($style)"
+style = "green"
+symbol = ""
 
-[docker_context]
-symbol = "🐳 "
-style = "blue"
+[rust]
+format = " [🦀 $version]($style)"
+style = "red"
+symbol = ""
 
 [cmd_duration]
-min_time = 500
-style = "bold yellow"
+min_time = 2000
+format = " [$duration]($style)"
+style = "dimmed white"
+
+[status]
+disabled = false
+format = " [$status]($style)"
+style = "bold red"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold purple)"
