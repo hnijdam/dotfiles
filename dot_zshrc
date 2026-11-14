@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME=""
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -104,6 +104,56 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Keep the existing personal tools available without requiring them on every host.
+if command -v zoxide >/dev/null 2>&1; then
+	eval "$(zoxide init zsh)"
+fi
+
+if command -v fzf >/dev/null 2>&1; then
+	if [[ -r "$HOME/.fzf.zsh" ]]; then
+		source "$HOME/.fzf.zsh"
+	elif fzf --zsh >/dev/null 2>&1; then
+		source <(fzf --zsh)
+	fi
+fi
+
+if command -v eza >/dev/null 2>&1; then
+	alias ls='eza --icons --group-directories-first'
+	alias ll='eza --icons --group-directories-first -lah'
+	alias la='eza --icons --group-directories-first -a'
+	alias lt='eza --icons --group-directories-first --tree --level=2'
+	export EZA_COLORS='di=38;5;75:ln=38;5;81:ex=38;5;114:fi=38;5;252:*.tar=38;5;180:*.gz=38;5;180:*.zip=38;5;180:*.7z=38;5;180:*.rpm=38;5;180:*.deb=38;5;180:*.jpg=38;5;183:*.jpeg=38;5;183:*.png=38;5;183:*.gif=38;5;183:*.svg=38;5;183:*.mp3=38;5;116:*.wav=38;5;116:*.flac=38;5;116:*.mp4=38;5;116:*.mkv=38;5;116:*.webm=38;5;116:*.py=38;5;221:*.sh=38;5;114:*.json=38;5;180:*.yaml=38;5;180:*.yml=38;5;180:*.md=38;5;252'
+fi
+
+if command -v bat >/dev/null 2>&1; then
+	alias cat='bat'
+elif command -v batcat >/dev/null 2>&1; then
+	alias cat='batcat'
+fi
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias 'cd..'='cd ..'
+alias c='clear'
+alias home='cd ~'
+alias projects='cd ~/Projects'
+
+alias lookup-main='cd ~/Development/DNS-CLI-tool && source .env/bin/activate && python main.py'
+alias lookup-script='cd ~/Development/DNS-CLI-tool && source .env/bin/activate && python script.py'
+alias lookup='cd ~/Development/DNS-CLI-tool && source .env/bin/activate && python script.py'
+
+typeset -U path PATH
+path=("$HOME/jorrit-management" /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin $path)
+if [[ -d "$HOME/.lmstudio/bin" ]]; then
+	path=("$HOME/.lmstudio/bin" $path)
+fi
+export PATH
+
+if [[ -r "$HOME/.local/bin/env" ]]; then
+	source "$HOME/.local/bin/env"
+fi
 
 if command -v starship >/dev/null 2>&1; then
 	eval "$(starship init zsh)"
