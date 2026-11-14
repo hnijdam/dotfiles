@@ -3,7 +3,11 @@
 .cache
 .local/share
 
-{{- if ne .chezmoi.os "windows" }}
-Documents/PowerShell/Microsoft.PowerShell_profile.ps1
-install-devtools-windows.ps1
+# OS-specifiek
+{{- if eq .chezmoi.os "windows" }}
+.chezmoiscripts/**/*.sh
+.chezmoiscripts/**/*.sh.tmpl
+{{- else }}
+.chezmoiscripts/**/*.ps1
+.chezmoiscripts/**/*.ps1.tmpl
 {{- end }}
