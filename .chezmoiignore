@@ -5,9 +5,9 @@
 
 # OS-specifiek
 {{- if eq .chezmoi.os "windows" }}
+.chezmoiscripts/*.sh
 .chezmoiscripts/**/*.sh
-.chezmoiscripts/**/*.sh.tmpl
 {{- else }}
+.chezmoiscripts/*.ps1
 .chezmoiscripts/**/*.ps1
-.chezmoiscripts/**/*.ps1.tmpl
 {{- end }}
