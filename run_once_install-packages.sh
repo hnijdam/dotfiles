@@ -4,6 +4,7 @@ set -e
 if command -v rpm-ostree >/dev/null; then
     echo "Atomic Fedora detected"
 
+    sudo rpm-ostree upgrade
     sudo rpm-ostree install \
         git \
         curl \
@@ -34,7 +35,7 @@ if command -v rpm-ostree >/dev/null; then
     fi
 elif command -v dnf >/dev/null; then
     echo "Fedora detected"
-    sudo dnf update -y
+    sudo dnf upgrade -y
 
     sudo dnf install -y \
         git \
@@ -58,17 +59,16 @@ elif command -v dnf >/dev/null; then
         npm \
         docker \
         docker-compose \
-        code \
         vlc \
         gimp \
         inkscape \
         fira-code-fonts \
-        google-noto-fonts \
         liberation-fonts \
         dejavu-sans-fonts
 elif command -v apt-get >/dev/null; then
     echo "Debian-based Linux detected"
     sudo apt-get update
+    sudo apt-get upgrade -y
     sudo apt-get install -y \
         git \
         curl \

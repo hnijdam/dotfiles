@@ -7,9 +7,6 @@ if command -v rpm-ostree >/dev/null; then
     # Container bestaat al, dus niet opnieuw maken
     toolbox create dev || true
 
-    # Gebruik DNF5 syntax: 'group install', NIET 'groupinstall'
-    toolbox run --container dev dnf group install -y "Development Tools"
-
     toolbox run --container dev dnf install -y \
         python3 \
         python3-pip \
@@ -31,7 +28,6 @@ if command -v rpm-ostree >/dev/null; then
 elif command -v dnf >/dev/null; then
     echo "Fedora detected"
 
-    sudo dnf group install -y "Development Tools"
     sudo dnf install -y \
         python3 \
         python3-pip \
