@@ -15,7 +15,7 @@ sudo apt-get update && sudo apt-get install -y git curl
 Haal daarna de dotfiles op en pas ze toe:
 
 ```sh
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply hnijdam
+sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin" init --apply hnijdam
 ```
 
 De installatie installeert ZSH, Oh My Zsh en Starship waar mogelijk. Op een
@@ -45,7 +45,7 @@ De installatie herkent WSL automatisch. Kies `base` voor alleen CLI-tools of
 sessie wordt veilig `base` gekozen. Wil je later ontwikkeltools toevoegen:
 
 ```sh
-DOTFILES_WSL_TOOLING=development bash "$(chezmoi source-path)/run_once_install-devtools.sh"
+DOTFILES_WSL_TOOLING=development bash "$("$HOME/.local/bin/chezmoi" source-path)/run_once_install-devtools.sh"
 ```
 
 Flatpak-apps, Scoop en Windows-desktoptools worden in WSL nooit gestart.
@@ -72,11 +72,11 @@ installeert het PowerShell 7, Git, VS Code, Python, Node.js LTS en Starship.
 Extra CLI-tools en de C++-toolchain zijn optioneel:
 
 ```powershell
-pwsh -NoProfile -File .\run_once_install-devtools-windows.ps1 -IncludeOptionalCli
+pwsh -NoProfile -File (Join-Path (chezmoi source-path) 'scripts/windows/run_once_install-devtools-windows.ps1') -IncludeOptionalCli
 ```
 
 ```powershell
-pwsh -NoProfile -File .\run_once_install-devtools-windows.ps1 -IncludeCppToolchain
+pwsh -NoProfile -File (Join-Path (chezmoi source-path) 'scripts/windows/run_once_install-devtools-windows.ps1') -IncludeCppToolchain
 ```
 
 Voor de fzf-keybindings in PowerShell:

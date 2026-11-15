@@ -16,6 +16,15 @@ if is_wsl; then
     case "$tooling" in
         development|dev)
             echo "WSL development tooling selected"
+            if command -v apt-get >/dev/null; then
+                sudo apt-get update
+                sudo apt-get install -y build-essential python3 python3-pip nodejs npm cmake gdb clang clang-tools
+            elif command -v dnf >/dev/null; then
+                sudo dnf install -y python3 python3-pip nodejs npm gcc gcc-c++ make cmake gdb clang clang-tools-extra
+            else
+                echo "No supported WSL package manager found; skipping development tooling"
+            fi
+            exit 0
             ;;
         base)
             echo "WSL base CLI selected; skipping development tooling"

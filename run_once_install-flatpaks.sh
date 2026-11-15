@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${WSL_DISTRO_NAME:-}" ]]; then
+if [[ -n "${WSL_DISTRO_NAME:-}" || -n "${WSL_INTEROP:-}" ]] || \
+    grep -qi microsoft /proc/sys/kernel/osrelease 2>/dev/null; then
 	echo "WSL detected; skipping desktop Flatpak apps"
 	exit 0
 fi

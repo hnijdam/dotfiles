@@ -2,10 +2,17 @@
 .ssh/known_hosts
 .cache
 .local/share
+tests/**
 
 # OS-specifiek
 {{- if ne .chezmoi.os "windows" }}
 scripts/windows/**
+{{- end }}
+{{- if eq .chezmoi.os "windows" }}
+generate-ssh.sh
+install-devtools.sh
+install-flatpaks.sh
+install-packages.sh
 {{- end }}
 {{- if ne .chezmoi.os "linux" }}
 scripts/linux/**
