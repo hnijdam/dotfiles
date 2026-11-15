@@ -50,6 +50,14 @@ DOTFILES_WSL_TOOLING=development bash "$("$HOME/.local/bin/chezmoi" source-path)
 
 Flatpak-apps, Scoop en Windows-desktoptools worden in WSL nooit gestart.
 
+Voor Fedora, Ubuntu en Debian in WSL is de aanbevolen publieke bootstrap:
+
+```sh
+curl -fsLS https://raw.githubusercontent.com/hnijdam/dotfiles/main/bootstrap/bootstrap-linux.sh | bash
+```
+
+Hij installeert Git, ChezMoi, GitHub CLI en Emacs. Met WSLg worden ook de Linux-GUI-editors ingericht; er is geen aparte X-server nodig.
+
 ### Native Windows (PowerShell)
 
 Open **PowerShell** (niet WSL) en bootstrap Scoop voor je huidige gebruiker.
@@ -59,6 +67,12 @@ Dit vereist geen adminrechten. Voer vanuit PowerShell geen `.sh`-scripts uit:
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 scoop install git chezmoi
+```
+
+Of gebruik de volledige publieke bootstrap (Git, ChezMoi, GitHub CLI, VS Code en Emacs):
+
+```powershell
+irm https://raw.githubusercontent.com/hnijdam/dotfiles/main/bootstrap/bootstrap-windows.ps1 | iex
 ```
 
 Open daarna een nieuwe PowerShell-sessie en haal de dotfiles op:
@@ -88,3 +102,8 @@ Install-Module PSFzf -Scope CurrentUser
 De optionele CLI-tools zijn eza, bat, fzf, zoxide, ripgrep, fd en GitHub CLI;
 de C++-toolchain bestaat uit CMake en LLVM. Windows Terminal kun je via de
 Microsoft Store installeren; het beheerde profiel is voor PowerShell 7.
+
+## macOS
+
+Chezmoi gebruikt intern de naam `darwin` voor macOS. De bestaande macOS-route
+blijft ongewijzigd en valt buiten de Windows- en WSL-bootstrap.

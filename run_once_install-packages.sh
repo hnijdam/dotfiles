@@ -6,19 +6,36 @@ is_wsl() {
         grep -qi microsoft /proc/sys/kernel/osrelease 2>/dev/null
 }
 
+is_wslg() {
+    [[ -d /mnt/wslg || -n "${WAYLAND_DISPLAY:-}" ]]
+}
+
 if is_wsl; then
     echo "WSL detected; installing Linux command-line tools only"
     if command -v apt-get >/dev/null; then
+        wsl_package_manager=apt
         sudo apt-get update
         sudo apt-get install -y \
             git curl wget zsh tmux neovim ripgrep fd-find fzf bat htop btop \
             tree unzip tar python3 python3-pip nodejs npm
     elif command -v dnf >/dev/null; then
+        wsl_package_manager=dnf
         sudo dnf install -y \
             git curl wget zsh tmux neovim ripgrep fd fzf bat htop btop \
             tree unzip tar python3 python3-pip nodejs npm
     else
+        wsl_package_manager=none
         echo "No supported WSL package manager found; skipping package installation"
+    fi
+    if is_wslg; then
+        echo "WSLg detected; installing Emacs and VS Code for Linux"
+        if [[ "$wsl_package_manager" == dnf ]]; then
+            sudo dnf install -y emacs code || echo "Install VS Code from the Microsoft repository if it is unavailable."
+        elif [[ "$wsl_package_manager" == apt ]]; then
+            sudo apt-get install -y emacs code || echo "Install VS Code from the Microsoft repository if it is unavailable."
+        fi
+    else
+        echo "WSL detected without WSLg; skipping GUI editors"
     fi
     exit 0
 fi
