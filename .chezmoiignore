@@ -17,6 +17,7 @@ install-packages.sh
 {{- if ne .chezmoi.os "linux" }}
 scripts/linux/**
 {{- end }}
+# macOS is identified by ChezMoi as "darwin".
 {{- if ne .chezmoi.os "darwin" }}
 scripts/darwin/**
 {{- end }}

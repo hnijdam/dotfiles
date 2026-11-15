@@ -16,6 +16,7 @@ assert_contains "$repo_root/run_once_install-packages.sh" 'WSL_DISTRO_NAME'
 assert_contains "$repo_root/run_once_install-packages.sh" 'WSL_INTEROP'
 assert_contains "$repo_root/run_once_install-devtools.sh" 'DOTFILES_WSL_TOOLING'
 assert_contains "$repo_root/run_once_install-devtools.sh" 'base'
+assert_contains "$repo_root/run_once_install-packages.sh" 'WSLg'
 assert_contains "$repo_root/.chezmoiignore" 'scripts/windows/**'
 assert_contains "$repo_root/.chezmoiignore" 'scripts/linux/**'
 assert_contains "$repo_root/.chezmoiignore" 'scripts/darwin/**'
@@ -34,9 +35,10 @@ mock_bin=$(mktemp -d)
 mock_log=$(mktemp)
 trap 'rm -rf "$mock_bin" "$mock_log"' EXIT
 printf '#!/bin/sh\nexec "$@"\n' > "$mock_bin/sudo"
-printf '#!/bin/sh\nprintf "%%s\\n" "$*" >> "$MOCK_LOG"\n' > "$mock_bin/apt-get"
-printf '#!/bin/sh\nprintf "%%s\\n" "$*" >> "$MOCK_LOG"\n' > "$mock_bin/rpm-ostree"
-chmod +x "$mock_bin/sudo" "$mock_bin/apt-get" "$mock_bin/rpm-ostree"
+printf '#!/bin/sh\nprintf "apt-get %%s\\n" "$*" >> "$MOCK_LOG"\n' > "$mock_bin/apt-get"
+printf '#!/bin/sh\nprintf "rpm-ostree %%s\\n" "$*" >> "$MOCK_LOG"\n' > "$mock_bin/rpm-ostree"
+printf '#!/bin/sh\nprintf "dnf %%s\\n" "$*" >> "$MOCK_LOG"\n' > "$mock_bin/dnf"
+chmod +x "$mock_bin/sudo" "$mock_bin/apt-get" "$mock_bin/rpm-ostree" "$mock_bin/dnf"
 
 PATH="$mock_bin:$PATH" MOCK_LOG="$mock_log" WSL_DISTRO_NAME=Ubuntu bash "$repo_root/run_once_install-packages.sh"
 grep -Fq 'install -y' "$mock_log" || {
@@ -45,6 +47,10 @@ grep -Fq 'install -y' "$mock_log" || {
 }
 if grep -Eq 'flatpak|vlc|gimp|inkscape' "$mock_log"; then
     printf 'WSL must not install desktop packages.\n' >&2
+    exit 1
+fi
+if grep -Fq 'dnf ' "$mock_log"; then
+    printf 'WSL editor setup must use the selected base package manager.\n' >&2
     exit 1
 fi
 
