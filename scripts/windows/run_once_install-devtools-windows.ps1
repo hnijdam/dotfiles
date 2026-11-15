@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 if ($env:OS -ne 'Windows_NT') {
-    throw 'This installer is for Windows. Use the .sh installers on Fedora or WSL.'
+    throw 'This installer must run from native PowerShell on Windows. In WSL, use the Linux bootstrap from the README; do not run this .ps1 file there.'
 }
 
 if ($env:SCOOP_GLOBAL) {

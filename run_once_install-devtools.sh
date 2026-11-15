@@ -1,5 +1,32 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
+
+is_wsl() {
+    [[ -n "${WSL_DISTRO_NAME:-}" || -n "${WSL_INTEROP:-}" ]] || \
+        grep -qi microsoft /proc/sys/kernel/osrelease 2>/dev/null
+}
+
+if is_wsl; then
+    tooling="${DOTFILES_WSL_TOOLING:-}"
+    if [[ -z "$tooling" && -t 0 && -t 1 ]]; then
+        read -r -p "WSL setup: choose 'base' (default) or 'development': " tooling
+    fi
+    tooling="${tooling:-base}"
+
+    case "$tooling" in
+        development|dev)
+            echo "WSL development tooling selected"
+            ;;
+        base)
+            echo "WSL base CLI selected; skipping development tooling"
+            exit 0
+            ;;
+        *)
+            printf "Unknown WSL tooling choice: %s (use base or development)\\n" "$tooling" >&2
+            exit 2
+            ;;
+    esac
+fi
 
 if command -v rpm-ostree >/dev/null; then
     echo "Atomic Fedora detected"

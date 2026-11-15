@@ -1,5 +1,27 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
+
+is_wsl() {
+    [[ -n "${WSL_DISTRO_NAME:-}" || -n "${WSL_INTEROP:-}" ]] || \
+        grep -qi microsoft /proc/sys/kernel/osrelease 2>/dev/null
+}
+
+if is_wsl; then
+    echo "WSL detected; installing Linux command-line tools only"
+    if command -v apt-get >/dev/null; then
+        sudo apt-get update
+        sudo apt-get install -y \
+            git curl wget zsh tmux neovim ripgrep fd-find fzf bat htop btop \
+            tree unzip tar python3 python3-pip nodejs npm
+    elif command -v dnf >/dev/null; then
+        sudo dnf install -y \
+            git curl wget zsh tmux neovim ripgrep fd fzf bat htop btop \
+            tree unzip tar python3 python3-pip nodejs npm
+    else
+        echo "No supported WSL package manager found; skipping package installation"
+    fi
+    exit 0
+fi
 
 if command -v rpm-ostree >/dev/null; then
     echo "Atomic Fedora detected"

@@ -1,6 +1,6 @@
 ## Installeren
 
-### Fedora, Debian/Ubuntu en WSL
+### Linux (Fedora, Debian en Ubuntu)
 
 Installeer eerst Git en curl:
 
@@ -8,7 +8,7 @@ Installeer eerst Git en curl:
 # Fedora Desktop
 sudo dnf install -y git curl
 
-# Ubuntu of Debian, waaronder WSL
+# Ubuntu of Debian
 sudo apt-get update && sudo apt-get install -y git curl
 ```
 
@@ -19,8 +19,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply hnijdam
 ```
 
 De installatie installeert ZSH, Oh My Zsh en Starship waar mogelijk. Op een
-normale Linux-desktop worden ook Flatpak-apps zoals Blackbox geïnstalleerd;
-op WSL worden deze overgeslagen. Windows Terminal blijft daar je terminal.
+normale Linux-desktop worden ook Flatpak-apps zoals Blackbox geïnstalleerd.
 
 Stel ZSH optioneel in als je login-shell en start daarna een nieuwe terminal:
 
@@ -31,10 +30,30 @@ chsh -s "$(command -v zsh)"
 Op een extra machine voer je `chezmoi init --apply hnijdam` uit; voor latere
 wijzigingen gebruik je `chezmoi update`.
 
-### Windows 10/11
+### WSL (Ubuntu/Debian)
 
-Open PowerShell en bootstrap Scoop voor je huidige gebruiker. Dit vereist geen
-adminrechten:
+Open je Linux-distributie in Windows Terminal, **niet** PowerShell. Gebruik
+alleen de Linux-opdracht; voer geen `.ps1`-bestand uit vanuit WSL:
+
+```sh
+sudo apt-get update && sudo apt-get install -y git curl
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply hnijdam
+```
+
+De installatie herkent WSL automatisch. Kies `base` voor alleen CLI-tools of
+`development` voor aanvullende bouw- en ontwikkeltools. In een niet-interactieve
+sessie wordt veilig `base` gekozen. Wil je later ontwikkeltools toevoegen:
+
+```sh
+DOTFILES_WSL_TOOLING=development bash "$(chezmoi source-path)/run_once_install-devtools.sh"
+```
+
+Flatpak-apps, Scoop en Windows-desktoptools worden in WSL nooit gestart.
+
+### Native Windows (PowerShell)
+
+Open **PowerShell** (niet WSL) en bootstrap Scoop voor je huidige gebruiker.
+Dit vereist geen adminrechten. Voer vanuit PowerShell geen `.sh`-scripts uit:
 
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force

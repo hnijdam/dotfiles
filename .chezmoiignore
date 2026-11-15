@@ -5,13 +5,11 @@
 
 # OS-specifiek
 {{- if ne .chezmoi.os "windows" }}
-.chezmoiscripts/windows/**
+scripts/windows/**
 {{- end }}
 {{- if ne .chezmoi.os "linux" }}
-{{- if ne .chezmoi.os "darwin" }}
-.chezmoiscripts/linux/**
-{{- end }}
+scripts/linux/**
 {{- end }}
 {{- if ne .chezmoi.os "darwin" }}
-.chezmoiscripts/darwin/**
+scripts/darwin/**
 {{- end }}
